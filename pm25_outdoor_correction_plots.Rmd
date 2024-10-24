@@ -1,5 +1,5 @@
 ---
-title: "ASPIRE Air Quality Plots"
+title: "Air Quality Plots"
 author: "Melissa McInroe"
 date: "2024-06-04"
 output: html_document
@@ -29,11 +29,11 @@ library(stringr)
 ```
 
 ```{r load data, warning=FALSE}
-setwd("O:/PRIV/IRBData/AspireHealthTulare")
-load("Data/Air_quality_stats/all_data_20240405.Rdata")
+setwd()
+load()
 names(all_data)
 
-pa_data<-fread("Data/Air_quality_stats/terra_bella_pa.txt", fill = TRUE, header = TRUE)
+pa_data<-fread()
 names(pa_data)
 
 # Apply FASM corrections - 
@@ -50,15 +50,15 @@ pa_data <- pa_data |>
   arrange(date)
 
 ## treatment groups
-treat_schedule<-fread("O:\\PRIV\\IRBData\\AspireHealthTulare\\Data\\Survey Data\\treatment_schedule.csv", drop = 3:27)
+treat_schedule<-fread()
 
 ## intervention period by household
-part_start_end<-fread("Participant tracking/participant_start_end_dates.csv", header = T)
+part_start_end<-fread()
 names(part_start_end)
 part_start_end$House_id<-str_sub(part_start_end$House_id,1,3)
 part_start_end$start_date<-str_pad(part_start_end$start_date,6,"0",side = "left") 
 
-ozone_df<-fread("O:\\PRIV\\IRBData\\AspireHealthTulare\\Analysis\\Air Quality Analysis\\Daily_Ozone_Porterville_2023.csv", header = T)
+ozone_df<-fread()
 colnames(ozone_df)<-c("Date","Ozone_AQI_Value","Main_Pollutant","Site_Name","Site_ID","Source")
 ```
 
@@ -103,35 +103,35 @@ ggplotly(g2)
 ```
 
 ```{r linear fits}
-# PurpleAir correlation to Porterville AirNow
+# PurpleAir correlation to AirNow
 ggplot(data_out,aes(x=pm2_5_airnow,y=pm2_5_pa)) +
   geom_point() +
   stat_poly_line() +
   stat_poly_eq(use_label(c("eq", "R2"))) + 
   geom_abline(intercept = 0, slope = 1) 
 
-# BlueSky correlation to Porterville AirNow
+# BlueSky correlation to AirNow
 ggplot(data_out,aes(x=pm2_5_airnow,y=pm2_5_bluesky_cor)) +
   geom_point() +
   stat_poly_line() +
   stat_poly_eq(use_label(c("eq", "R2"))) + 
   geom_abline(intercept = 0, slope = 1) 
 
-# BlueSky correlation to Porterville T640
+# BlueSky correlation to T640
 ggplot(data_out,aes(x=pm2_5_t640,y=pm2_5_bluesky_cor)) +
   geom_point() +
   stat_poly_line() +
   stat_poly_eq(use_label(c("eq", "R2"))) + 
   geom_abline(intercept = 0, slope = 1) 
 
-# BlueSky correlation to Porterville T640
+# BlueSky correlation to T640
 ggplot(data_out,aes(x=pm10_t640,y=pm10_bluesky)) +
   geom_point() +
   stat_poly_line() +
   stat_poly_eq(use_label(c("eq", "R2"))) + 
   geom_abline(intercept = 0, slope = 1) 
 
-# BlueSky correlation to PurpleAir in Terra Bella
+# BlueSky correlation to PurpleAir
 ggplot(data_out,aes(x=pm2_5_bluesky_cor,y=pm2_5_pa)) +
   geom_point() +
   stat_poly_line() +
@@ -154,7 +154,7 @@ intervention_pm25<-subset(data_out, date>="2023-10-07")
 breaks <- c(0, 9, 35.4, 55.4, 125.4, 225.4,325)
 labels <- c("Good\n(0.0-9.0)", "Moderate\n(9.1-35.4)", "Unhealthy for\nSensitive Groups\n(35.5-55.4)", "Unhealthy\n(55.5-125.4)", "Very Unhealthy\n(125.5-225.4)", "Hazardous\n(225.5+)")
 
-#png("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/Calendar_plots/intervent_prd_outdoorpm25_calendarplot.png")
+#png(_calendarplot.png")
 cal_plot<-calendarPlot(intervention_pm25, 
              year=2023,
              pollutant="pm2_5_bluesky_cor",
@@ -167,7 +167,7 @@ cal_plot<-calendarPlot(intervention_pm25,
              cex.lim = c(4,10),
              cols=c("green","yellow","orange","red","purple","maroon"),
              par.settings=list(fontsize=list(text=25)),font.lab = 2)
-pdf("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/Calendar_plots/calendarplot_eng_wnumeric_v2.pdf")
+pdf("/calendarplot_eng_wnumeric_v2.pdf")
     #width = 1400,
 #     height = 1200)
 
@@ -187,7 +187,7 @@ labels <- c("Bueno\n(0.0-9.0)","Moderado\n(9.1-35.4)","Insalubre para\ngrupos se
 
 Sys.setlocale("LC_TIME","Spanish")
 
-pdf("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/Calendar_plots/intervent_prd_outdoorpm25_spanish_calendarplot.pdf")
+pdf("_spanish_calendarplot.pdf")
 cal_plot<-calendarPlot(intervention_pm25, 
              year=2023,
              pollutant="pm2_5_bluesky_cor",
@@ -212,10 +212,10 @@ colnames(treat_schedule)<-c("part_ID", "house_ID_treat")
 
 treat_schedule$treatment<-substr(treat_schedule$house_ID_treat, 5,5)
 #treat_schedule$house_ID<-substr(treat_schedule$house_ID_treat,1,3)
-treat_schedule$treatment<-ifelse(treat_schedule$house_ID=="H37", "C",treat_schedule$treatment)
+treat_schedule$treatment<-ifelse(treat_schedule$house_ID=="", "C",treat_schedule$treatment)
 treat_schedule$house_ID_treat<-NULL
 
-ambass_houses<-c("H20","H21","H22")
+ambass_houses<-c()
 ambassador_data<-treat_schedule[which(treat_schedule$treatment=="A")]
 all_data_ambassador<-subset(all_data, house_id %in% ambass_houses)
 
@@ -243,9 +243,9 @@ This version does not use corrected indoor values.
 
 ```{r home plots, eval = FALSE, echo = FALSE}
 room_id_list<-unique(all_data$room_id)
-no_power<-c("R26","R30","R56","R57",unique(all_data$room_id[which(all_data$treatment=="Control")]))
-wrong_power<-c("R05","R16")
-no_indoor_above<-c("R14","R16","R22","R49","R54","R55")
+no_power<-c("",unique(all_data$room_id[which(all_data$treatment=="Control")]))
+wrong_power<-c()
+no_indoor_above<-c()
 
 for(i in seq(room_id_list)) {
   room = room_id_list[i]
@@ -262,8 +262,8 @@ if(room %in% no_indoor_above) {
 }
 
 plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
-start_date<-"2023-10-09 19:00:00 PDT"
-end_date<-"2023-10-23 14:00:00 PDT"
+start_date<-""
+end_date<-""
 
 plot_df<-subset(plot_df, date>=start_date & date<=end_date)
 
@@ -279,7 +279,7 @@ plot_door<-subset(plot_df, main_door>0)
 bar_height<-max(pmax(plot_df_average6hr$moving_avg_indr, plot_df_average6hr$moving_avg_outdr, na.rm = T), na.rm=T) +5
 mid_height<-bar_height/2
 
-# png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",room,"_indr_outdr_AQ_plot.png"),
+# png(paste0("/",room,"_indr_outdr_AQ_plot.png"),
 #     width=1200, height = 900)
 p<-ggplot(plot_df) +
   geom_rug(data = plot_door,mapping = aes(x =datetime_tz, y =main_door), color = "darkolivegreen", sides = "b") +
@@ -311,8 +311,8 @@ plot_df<-left_join(plot_df,data_out[,c("date","pm2_5_bluesky_cor")], by = "date"
 plot_df_power<-subset(all_data, power>20 & room_id ==room)
 
 if(room %in% wrong_power) {
-  start_date<-"2023-10-08 00:00:00 UCT"
-  end_date<-"2023-10-21 02:00:00 UCT"
+  start_date<-""
+  end_date<-""
   plot_df_power<-subset(plot_df_power,date>=start_date & date<=end_date)
 } else {
 
@@ -343,7 +343,7 @@ if(room %in% no_indoor_above) {
   alpha_val<-0.3
 }
 
-# png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",room,"_indr_outdr_AQ_plot.png"),
+# png(paste0("/",room,"_indr_outdr_AQ_plot.png"),
 #     width=1200, height = 900)
 p<-ggplot(plot_df) +
   geom_braid(data = plot_df_average6hr,aes(x = datetime_tz, ymin = moving_avg_indr, ymax = moving_avg_outdr, fill = moving_avg_indr<moving_avg_outdr), alpha = alpha_val) +
@@ -381,12 +381,12 @@ In this version of the home reports there are two plots created. One plot shows 
 ```{r eval = FALSE}
 room_id_list<-unique(all_data$room_id)
 house_id_list<-unique(all_data$house_id)
-intervention_pm25<-subset(all_data, date>="2023-10-07")
+intervention_pm25<-subset(all_data, date>="")
 
-# no_power<-c("R26","R30","R56","R57",unique(all_data$room_id[which(all_data$treatment=="Control")]))
-# wrong_power<-c("R05","R16")
-no_indoor_above<-c("R14","R16","R22","R49","R54","R55")
-no_indoor_pm<-c("R33","R35","R36","R38","R41","R45","R48","R56")
+# no_power<-c("",unique(all_data$room_id[which(all_data$treatment=="Control")]))
+# wrong_power<-c()
+no_indoor_above<-c()
+no_indoor_pm<-c()
 
 for(i in seq(room_id_list)) {
   room = room_id_list[i]
@@ -394,7 +394,7 @@ for(i in seq(room_id_list)) {
                                                                         "pm2_5_indr_cor","other_door")]
   house<-plot_df$house_id[1]
   if(room %in% no_indoor_pm) {
-    enddate<-"2023-10-23 02:00:00 UCT"
+    enddate<-""
   }else {
   start_date<-min(plot_df$date[which(!is.na(plot_df$pm2_5_indr_cor))])
   enddate<-max(plot_df$date[which(!is.na(plot_df$pm2_5_indr_cor))])
@@ -405,8 +405,8 @@ for(i in seq(room_id_list)) {
    col <-c("grey4","#FFFFFF00")
 
 plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
-# start_date<-"2023-10-09 19:00:00 PDT"
-# end_date<-"2023-10-23 14:00:00 PDT"
+# start_date<-""
+# end_date<-""
 
 plot_df$time<-1:nrow(plot_df)
 
@@ -415,10 +415,10 @@ plot_door<-subset(plot_df, main_door>0 | other_door>0)
 # bar_height<-max(pmax(plot_df_average6hr$moving_avg_indr, plot_df_average6hr$moving_avg_outdr, na.rm = T), na.rm=T) +5
 # mid_height<-bar_height/2
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/",room,"_indr_peak_plot.png"),
+png(paste0("/",house,"/",room,"_indr_peak_plot.png"),
     width=1200, height = 900)
 
-# png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",room,"_indr_peak_plot.png"),
+# png(paste0("/",room,"_indr_peak_plot.png"),
 #     width=1200, height = 900)
 
 p<-ggplot(plot_df) +
@@ -456,7 +456,7 @@ plot_snippet<-subset(plot_df, format(as.Date(date), "%m_%d")==format(as.Date(abo
 start_date<-min(plot_snippet$date)
 end_date<-max(plot_snippet$date)
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/",room,"_indr__snippet_peak_plot.png"),
+png(paste0("/",house,"/",room,"_indr__snippet_peak_plot.png"),
     width=900, height = 700)
 
 #### Snippet of time where the indoor pm2.5 is larger than the outdoor pm2.5.
@@ -486,9 +486,9 @@ dev.off()
 }
 #----------------------------------------------------------------------------------------------------------------------------------
 
-## Manually change R06 and R12 snippet plots to capture higher peaks. 
+## Manually change R and R snippet plots to capture higher peaks. 
 
-room<-"R06"
+room<-"R"
   plot_df<-intervention_pm25[which(intervention_pm25$room_id == room),c("house_id","date","pm2_5_bluesky_cor","main_door",
                                                                         "pm2_5_indr_cor","other_door")]
   house<-plot_df$house_id[1]
@@ -502,8 +502,8 @@ room<-"R06"
    col <-c("grey4","#FFFFFF00")
 
 plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
-# start_date<-"2023-10-09 19:00:00 PDT"
-# end_date<-"2023-10-23 14:00:00 PDT"
+# start_date<-""
+# end_date<-""
 
 plot_df$time<-1:nrow(plot_df)
 
@@ -515,7 +515,7 @@ start_date<-min(plot_snippet$datetime_tz)
 end_date<-max(plot_snippet$datetime_tz)
 
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/",room,"_indr__snippet_peak_plot.png"),
+png(paste0("/",house,"/",room,"_indr__snippet_peak_plot.png"),
     width=900, height = 700)
 
 #### Snippet of time where the indoor pm2.5 is larger than the outdoor pm2.5.
@@ -543,7 +543,7 @@ print(p)
 dev.off()
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 
-room<-"R12"
+room<-"R"
 
   plot_df<-intervention_pm25[which(intervention_pm25$room_id == room),c("house_id","date","pm2_5_bluesky_cor","main_door",
                                                                         "pm2_5_indr_cor","other_door")]
@@ -558,8 +558,8 @@ room<-"R12"
    col <-c("grey4","#FFFFFF00")
 
 plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
-# start_date<-"2023-10-09 19:00:00 PDT"
-# end_date<-"2023-10-23 14:00:00 PDT"
+# start_date<-""
+# end_date<-""
 
 plot_df$time<-1:nrow(plot_df)
 
@@ -571,7 +571,7 @@ start_date<-min(plot_snippet$datetime_tz)
 end_date<-max(plot_snippet$datetime_tz)
 
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/",room,"_indr__snippet_peak_plot.png"),
+png(paste0("/",house,"/",room,"_indr__snippet_peak_plot.png"),
     width=900, height = 700)
 
 #### Snippet of time where the indoor pm2.5 is larger than the outdoor pm2.5.
@@ -605,8 +605,8 @@ dev.off()
 
 ```{r eval = FALSE}
 
-no_power<-c("R26","R30","R56","R57",unique(all_data$room_id[which(all_data$treatment=="Control")]), no_indoor_pm)
-#wrong_power<-c("R05","R16")
+no_power<-c("",unique(all_data$room_id[which(all_data$treatment=="Control")]), no_indoor_pm)
+#wrong_power<-c("")
 
 
 for(i in seq(room_id_list)) {
@@ -621,9 +621,9 @@ if(room %in% no_power) {
 
 if(room %in% wrong_power) {
   
-  plot_df_power<-subset(all_data, date>="2023-10-08 00:00:00 UCT" & room_id ==room)
-  # start_date<-"2023-10-08 00:00:00 UCT"
-  # end_date<-"2023-10-21 02:00:00 UCT"
+  plot_df_power<-subset(all_data, date>="" & room_id ==room)
+  # start_date<-""
+  # end_date<-""
 
 } else {
   plot_df_power<-subset(all_data, power>20 & room_id ==room)  
@@ -645,7 +645,7 @@ bar_height<-max(pmax(plot_df$pm2_5_indr_cor, plot_df$pm2_5_bluesky_cor, na.rm = 
 mid_height<-bar_height/2
 
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/",room,"_indr_filter_plot.png"),
+png(paste0("/",house,"/",room,"_indr_filter_plot.png"),
     width=1200, height = 900)
 p<-ggplot(plot_df) +
   geom_tile(data = plot_df_power, mapping = aes(x=datetime_tz,y = mid_height), 
@@ -675,7 +675,7 @@ end_date<-max(plot_snippet$date)
 bar_height<-max(pmax(plot_snippet$pm2_5_indr_cor, plot_snippet$pm2_5_bluesky_cor, na.rm = T), na.rm=T) +5
 mid_height<-bar_height/2
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/",room,"_indr__snippet_filter_plot.png"),
+png(paste0("/",house,"/",room,"_indr__snippet_filter_plot.png"),
     width=900, height = 700)
 
 
@@ -711,10 +711,10 @@ dev.off()
 - shorter time period for snippet plot
 
 ```{r, warning = FALSE, eval = FALSE}
-no_power<-c("R26","R30","R56","R57", no_indoor_pm)
+no_power<-c("", no_indoor_pm)
 part_start_end$House_id<-str_sub(part_start_end$House_id,1,3)
 part_start_end$start_date<-str_pad(part_start_end$start_date,6,"0",side = "left")  
-wrong_power<-c("R05","R16")
+wrong_power<-c("")
 
 
             
@@ -741,9 +741,9 @@ if(room %in% no_power) {
 
 if(room %in% wrong_power) {
   
-  plot_df_power<-subset(all_data, date>="2023-10-08 00:00:00 UCT" & room_id ==room)
-  # start_date<-"2023-10-08 00:00:00 UCT"
-  # end_date<-"2023-10-21 02:00:00 UCT"
+  plot_df_power<-subset(all_data, date>="" & room_id ==room)
+  # start_date<-""
+  # end_date<-""
 
 } else {
   plot_df_power<-subset(all_data, power>20 & room_id ==room)  
@@ -767,7 +767,7 @@ if(plot_df$treatment[1] == "Treatment") {
   col = "skyblue"
 }
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/week2_",room,"_indr_filter_plot.png"),
+png(paste0("/",house,"/week2_",room,"_indr_filter_plot.png"),
     width=1200, height = 900)
 p<-ggplot(plot_df) +
   geom_tile(data = plot_df_power, mapping = aes(x=datetime_tz,y = mid_height), 
@@ -797,7 +797,7 @@ end_date<-max(plot_snippet$datetime_tz)
 bar_height<-max(pmax(plot_snippet$pm2_5_indr_cor, plot_snippet$pm2_5_bluesky_cor, na.rm = T), na.rm=T) +5
 mid_height<-bar_height/2
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/",
+png(paste0("/",house,"/",
            room,"_evening_indr_snippet_filter_plot.png"),
     width=900, height = 700)
 
@@ -832,8 +832,8 @@ dev.off()
 
 ```{r, eval = FALSE}
 
-no_indoor_above<-c("R14","R16","R22","R49","R54","R55")
-no_indoor_pm<-c("R33","R35","R36","R38","R41","R45","R48","R56")
+no_indoor_above<-c()
+no_indoor_pm<-c()
 
 for(i in seq(room_id_list)) {
   room = room_id_list[i]
@@ -847,15 +847,15 @@ for(i in seq(room_id_list)) {
  
   
   if(room %in% no_indoor_pm) {
-    enddate<-"2023-10-23 23:00:00 PDT"
+    enddate<-""
   }else {
   enddate<-max(plot_df$datetime_tz[which(!is.na(plot_df$pm2_5_indr_cor))])
   }
     
   start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(start_date)<-2023
+  year(start_date)<-2---
   # srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  # year(srt_end$end_date)<-2023
+  # year(srt_end$end_date)<-2---
   
   plot_df<-subset(plot_df, datetime_tz<=enddate & date>=start_date)
 
@@ -870,7 +870,7 @@ plot_df<-subset(plot_df,time>=mid_time)
 plot_door<-subset(plot_df, main_door>0 | other_door>0)
 
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/",room,"_wk2_indr_peak_plot.png"),
+png(paste0("/",house,"/",room,"_wk2_indr_peak_plot.png"),
     width=1200, height = 900)
 
 
@@ -911,7 +911,7 @@ plot_snippet<-subset(plot_snippet, time>12)
 start_date<-min(plot_snippet$date)
 end_date<-max(plot_snippet$date)
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/",
+png(paste0("/",house,"/",
            room,"_evening_indr_snippet_peak_plot.png"),
     width=900, height = 700)
 
@@ -945,7 +945,7 @@ dev.off()
 
 # ## Manually change R06 and R12 snippet plots to capture higher peaks. 
 # 
-# room<-"R06"
+# room<-""
 #   plot_df<-intervention_pm25[which(intervention_pm25$room_id == room),c("house_id","date","pm2_5_bluesky_cor","main_door",
 #                                                                         "pm2_5_indr_cor","other_door")]
 #   house<-plot_df$house_id[1]
@@ -959,8 +959,8 @@ dev.off()
 #    col <-c("grey4","#FFFFFF00")
 # 
 # plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
-# # start_date<-"2023-10-09 19:00:00 PDT"
-# # end_date<-"2023-10-23 14:00:00 PDT"
+# # start_date<-""
+# # end_date<-""
 # 
 # 
 # plot_df$time<-1:nrow(plot_df)
@@ -970,7 +970,7 @@ dev.off()
 # end_date<-max(plot_snippet$datetime_tz)
 # 
 # 
-# png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/",room,"_indr__snippet_peak_plot.png"),
+# png(paste0("/",house,"/",room,"_indr__snippet_peak_plot.png"),
 #     width=900, height = 700)
 # 
 # #### Snippet of time where the indoor pm2.5 is larger than the outdoor pm2.5.
@@ -1013,8 +1013,8 @@ dev.off()
 #    col <-c("grey4","#FFFFFF00")
 # 
 # plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
-# # start_date<-"2023-10-09 19:00:00 PDT"
-# # end_date<-"2023-10-23 14:00:00 PDT"
+# # start_date<-""
+# # end_date<-""
 # 
 # plot_df$time<-1:nrow(plot_df)
 # 
@@ -1026,7 +1026,7 @@ dev.off()
 # end_date<-max(plot_snippet$datetime_tz)
 # 
 # 
-# png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/",room,"_indr__snippet_peak_plot.png"),
+# png(paste0("/",house,"/",room,"_indr__snippet_peak_plot.png"),
 #     width=900, height = 700)
 # 
 # #### Snippet of time where the indoor pm2.5 is larger than the outdoor pm2.5.
@@ -1063,16 +1063,16 @@ room_id_list<-unique(all_data$room_id)
 house_id_list<-unique(all_data$house_id)
 
 
-no_indoor_pm<-c("R33","R35","R36","R38","R41","R45","R48","R56")
-no_power<-c("R26","R30","R56","R57", no_indoor_pm)
+no_indoor_pm<-c()
+no_power<-c()
 
-wrong_power<-c("R05","R16")
-#no_indoor_above<-c("R54","R55")
+wrong_power<-c()
+#no_indoor_above<-c()
 
 part_start_end$House_id<-str_sub(part_start_end$House_id,1,3)
 part_start_end$start_date<-str_pad(part_start_end$start_date,6,"0",side = "left")  
 
-intervention_pm25<-subset(all_data, date>="2023-10-07")
+intervention_pm25<-subset(all_data, date>="")
 
 
 
@@ -1087,17 +1087,17 @@ for(i in seq(room_id_list)) {
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   #plot_df$date_daymon<-as.Date(plot_df$datetime_tz,format = "%d-%b")
   srt_end$start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
   
   ## subset power data for filter on shading
   if(room %in% wrong_power) {
   
-  plot_df_power<-subset(all_data, date>="2023-10-08 00:00:00 UCT" & room_id ==room)
-  # start_date<-"2023-10-08 00:00:00 UCT"
-  # end_date<-"2023-10-21 02:00:00 UCT"
+  plot_df_power<-subset(all_data, date>="" & room_id ==room)
+  # start_date<-""
+  # end_date<-""
 
   } else {
     plot_df_power<-subset(all_data, power>20 & room_id ==room)  
@@ -1112,13 +1112,13 @@ for(i in seq(room_id_list)) {
   }
   
     if(room %in% no_indoor_pm) {
-    enddate<-"2023-10-23 23:00:00 PDT"
+    enddate<-""
   }else {
   enddate<-max(plot_df$datetime_tz[which(!is.na(plot_df$pm2_5_indr_cor))])
   }
     
   start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(start_date)<-2023
+  year(start_date)<-2---
   ## Adjust for timezone
   plot_df_power$datetime_tz<-as.POSIXct(format(plot_df_power$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   plot_df_power<-subset(plot_df_power, datetime_tz>=srt_end$start_date & datetime_tz<=srt_end$end_date)
@@ -1142,7 +1142,7 @@ for(i in seq(room_id_list)) {
     alpha_val<-0.3
 #  }
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/week2_",room,"_full_plot.png"),
+png(paste0("/",house,"/week2_",room,"_full_plot.png"),
     width=1400, height = 900)  
   
   ## full plot to save for wk 2
@@ -1168,218 +1168,8 @@ png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/hom
  
 dev.off() 
   
-## Snippet plot
-## select time period with high indoor, in the evening
-## need to correct how snippet is selected
-# above_outdr<-plot_df$date[which(plot_df$pm2_5_indr_cor>plot_df$pm2_5_bluesky_cor & plot_df$power>20)]  #[round(length(which(plot_df$pm2_5_indr_cor>plot_df$pm2_5_bluesky_cor))/2,0)]
-# plot_snippet<-subset(plot_df, format(as.Date(datetime_tz), "%m_%d")==format(as.Date(above_outdr),"%m_%d"))
-# plot_snippet$time<-1:nrow(plot_snippet)
-# plot_snippet<-subset(plot_snippet, time<=12)
-# #power_snippet<-plot_df_power$date[round(nrow(plot_df_power)/2,0)]
-# #plot_snippet<-subset(plot_df, format(as.Date(datetime_tz), "%m_%d")=="10_23")[c(1:12),]              ##format(as.Date(power_snippet),"%m_%d"))[c(1:12),]
-# start_date<-min(plot_snippet$datetime_tz)
-# end_date<-max(plot_snippet$datetime_tz)
-# bar_height<-max(pmax(plot_snippet$pm2_5_indr_cor, plot_snippet$pm2_5_bluesky_cor, na.rm = T), na.rm=T) +5
-# mid_height<-bar_height/2
-# 
-# png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/snippet_",room,"_plot.png"),
-#     width=1000, height = 700)
-# 
-# p<-ggplot(plot_snippet) +
-#   geom_tile(data = plot_df_power, mapping = aes(x=datetime_tz,y = mid_height), 
-#             fill = col_trt, alpha = 0.2, height = bar_height) +
-#   geom_line(data=plot_df,mapping = aes(x = datetime_tz, y = pm2_5_indr_cor, color = "Indoor")) +
-#   geom_braid(aes(x = datetime_tz, ymin = pm2_5_indr_cor, ymax = pm2_5_bluesky_cor, fill = pm2_5_indr_cor<pm2_5_bluesky_cor), alpha = alpha_val) +
-#   geom_line(data = plot_df, mapping = aes(x = datetime_tz, y = pm2_5_bluesky_cor, color = "Outdoor")) +
-#   scale_y_continuous(expand = c(0,0), limits = c(0,bar_height))+
-#   scale_x_datetime(date_breaks = "2 hours", date_labels = "%b %d %H:%M", limits = c(start_date,end_date)) +
-#   scale_color_manual(name = "Air Quality", labels = c("Indoor","Outdoor"), values = c("navyblue", "hotpink2")) +
-#   scale_fill_manual(values = col_indr, name = "", labels = c("PM 2.5 Concentration Larger Indoor","")) +  
-#   labs(y=expression("PM" [2.5] *" (" *mu *"g/m" ^3 *")")) +
-#   theme(panel.background = element_blank(),
-#         axis.line = element_line(color = "black"),
-#         axis.title.x = element_blank(),
-#         axis.text = element_text(size = 18, face = "bold"),
-#         axis.title.y = element_text(size = 18, face = "bold"),
-#         legend.position = "none")
-# print(p) 
-# 
-# dev.off()
 }
 
-
-
-
-  
-  
-  
-  
-
-
-
-
-
-
-  
-#   if(room %in% no_power) {
-#   plot_df<-all_data[which(all_data$room_id ==room),c("date","pm2_5","power","main_door")]
-#   plot_df<-left_join(plot_df,data_out[,c("date","pm2_5_bluesky_cor")], by = "date")
-# 
-# 
-# 
-# plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
-# start_date<-"2023-10-09 19:00:00 PDT"
-# end_date<-"2023-10-23 14:00:00 PDT"
-# 
-# 
-# } else {
-# plot_df<-all_data[which(all_data$room_id ==room),c("date","pm2_5","power","main_door")]
-# plot_df<-left_join(plot_df,data_out[,c("date","pm2_5_bluesky_cor")], by = "date")
-# 
-# plot_df_power<-subset(all_data, power>20 & room_id ==room)
-# 
-# if(room %in% wrong_power) {
-#   start_date<-"2023-10-08 00:00:00 UCT"
-#   end_date<-"2023-10-21 02:00:00 UCT"
-#   plot_df_power<-subset(plot_df_power,date>=start_date & date<=end_date)
-# } else {
-# 
-# start_date<-min(plot_df_power$date)
-# end_date<-max(plot_df_power$date)
-# }
-# 
-# plot_df<-subset(plot_df, date>=start_date & date<=end_date)
-# plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
-# plot_df_power$datetime_tz<-as.POSIXct(format(plot_df_power$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
-# 
-# plot_df$time<-1:nrow(plot_df)
-# 
-# plot_df_average6hr<-plot_df
-# plot_df_average6hr<-plot_df_average6hr %>%
-#   mutate(moving_avg_indr = rollmean(pm2_5, k = 6, fill = NA, align = "right"),
-#          moving_avg_outdr=rollmean(pm2_5_bluesky_cor, k = 6, fill = NA, align = "right"))
-# plot_df_average6hr$hr6<-ifelse((plot_df_average6hr$time %% 6)==0,"yes","no")
-# plot_df_average6hr<-subset(plot_df_average6hr, hr6 == "yes")
-# bar_height<-max(pmax(plot_df_average6hr$moving_avg_indr, plot_df_average6hr$moving_avg_outdr, na.rm = T), na.rm=T) +5
-# mid_height<-bar_height/2
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# if(room %in% no_indoor_pm) {
-#   next
-# }else {
-# 
-# above_outdr<-plot_df$date[which(plot_df$pm2_5_indr_cor>plot_df$pm2_5_bluesky_cor)][round(length(which(plot_df$pm2_5_indr_cor>plot_df$pm2_5_bluesky_cor))/2,0)]
-# plot_snippet<-subset(plot_df, format(as.Date(date), "%m_%d")==format(as.Date(above_outdr),"%m_%d"))
-# plot_snippet$time<-1:nrow(plot_snippet)
-# plot_snippet<-subset(plot_snippet, time>12)
-# start_date<-min(plot_snippet$date)
-# end_date<-max(plot_snippet$date)
-# 
-# #png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"/",
-# #           room,"_evening_indr_snippet_peak_plot.png"),
-# #    width=900, height = 700)
-# 
-# no_power<-c("R26","R30","R56","R57", no_indoor_pm)
-# part_start_end$House_id<-str_sub(part_start_end$House_id,1,3)
-# part_start_end$start_date<-str_pad(part_start_end$start_date,6,"0",side = "left")  
-# wrong_power<-c("R05","R16")
-# 
-# 
-#             
-# ##unique(all_data$room_id[which(all_data$treatment=="Control")])
-# 
-# for(i in seq(room_id_list)) {
-#   room = room_id_list[i]
-# if(room %in% no_power) {
-#      next
-# } 
-#   
-#   
-# 
-# 
-#   
-# 
-# 
-# if(plot_df$treatment[1] == "Treatment") {
-#   col <- "lightgreen"
-# } else {
-#   col = "skyblue"
-# }
-# 
-# 
-# p<-ggplot(plot_df) +
-#   geom_tile(data = plot_df_power, mapping = aes(x=datetime_tz,y = mid_height), 
-#             fill = col, alpha = 0.2, height = bar_height) +
-#   geom_line(data=plot_df,mapping = aes(x = datetime_tz, y = pm2_5_indr_cor, color = "Indoor")) +
-#   geom_line(data = plot_df, mapping = aes(x = datetime_tz, y = pm2_5_bluesky_cor, color = "Outdoor")) +
-#   scale_y_continuous(expand = c(0,0))+
-#   scale_x_datetime(date_breaks = "1 days", date_labels = "%b %d") +
-#   scale_color_manual(name = "Air Quality", labels = c("Indoor","Outdoor"), values = c("navyblue", "hotpink2")) +
-#   labs(y=expression("PM" [2.5] *" (" *mu *"g/m" ^3 *")")) +
-#   theme(panel.background = element_blank(),
-#         axis.line = element_line(color = "black"),
-#         axis.title.x = element_blank(),
-#         axis.text = element_text(size = 14, face = "bold"),
-#         axis.title.y = element_text(size = 14, face = "bold"),
-#         legend.position = "bottom",
-#         legend.title = element_text(size = 12, face = "bold"))
-# print(p)
-# 
-# 
-# ##### Snippet of time where the air filter is on.
-# 
-# 
-# 
-# 
-# dev.off()
-#      
-# }
-# 
-# 
-# for(i in seq(room_id_list)) {
-#   room = room_id_list[i]
-#   plot_df<-all_data[which(all_data$room_id == room),c("house_id","date","pm2_5_bluesky_cor","main_door","pm2_5_indr_cor","other_door")]
-#    plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")              
-#   house<-plot_df$house_id[1]
-#   
-#   srt_end<-distinct(part_start_end[which(part_start_end$House_id == house),2:4])
-#  
-#   #plot_df$date_daymon<-as.Date(plot_df$datetime_tz,format = "%d-%b")
-#  
-#   
-#   if(room %in% no_indoor_pm) {
-#     enddate<-"2023-10-23 23:00:00 PDT"
-#   }else {
-#   enddate<-max(plot_df$datetime_tz[which(!is.na(plot_df$pm2_5_indr_cor))])
-#   }
-#     
-#   start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-#   year(start_date)<-2023
-#   # srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-#   # year(srt_end$end_date)<-2023
-#   
-#   plot_df<-subset(plot_df, datetime_tz<=enddate & date>=start_date)
-# 
-#   alpha_val<-0.3
-#    col <-c("grey4","#FFFFFF00")
-# 
-# 
-# plot_df$time<-1:nrow(plot_df)
-# mid_time<-round(nrow(plot_df)/2,0)
-# plot_df<-subset(plot_df,time>=mid_time)
-# 
-# plot_door<-subset(plot_df, main_door>0 | other_door>0)
-
-
-
-
-```
 
 ## Average Home PM2.5 bar plot with overall averages
 Only the evening temperatures during the intervention period. 
@@ -1390,14 +1180,14 @@ Only the evening temperatures during the intervention period.
 ## Average Ozone
 avg_ozone<-ozone_df %>%
   mutate(nice_Date = as.Date(strptime(Date,"%m/%d/%Y"))) %>%
-  filter(nice_Date >=as.Date(strptime("10/07/2023","%m/%d/%Y")) & nice_Date <= as.Date(strptime("10/29/2023","%m/%d/%Y"))) %>%
+  filter(nice_Date >=as.Date(strptime("","%m/%d/%Y")) & nice_Date <= as.Date(strptime("","%m/%d/%Y"))) %>%
   summarise(max_ozone = max(Ozone_AQI_Value),
             min_ozone = min(Ozone_AQI_Value),
             avg_ozone = mean(Ozone_AQI_Value))
             
 ## Average Outdoor PM25 
 data_out$datetime_tz<-as.POSIXct(format(data_out$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
-intervention_pm25<-subset(data_out, datetime_tz>=as.POSIXct(format(as.Date(strptime("2023-10-07","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles"))
+intervention_pm25<-subset(data_out, datetime_tz>=as.POSIXct(format(as.Date(strptime("","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles"))
 evening_hours_inter_df<- intervention_pm25 %>%
    mutate(Hour = as.numeric(hour(datetime_tz))) %>% 
   filter(Hour <= 5 | Hour >= 19) %>%
@@ -1410,7 +1200,7 @@ evening_hours_inter_df<- intervention_pm25 %>%
 avg_indr_evening_pm<- all_data %>%
   mutate(datetime_tz = as.POSIXct(format(date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles"),
          Hour = as.numeric(hour(datetime_tz))) %>%
-  filter(datetime_tz>=as.POSIXct(format(as.Date(strptime("2023-10-07","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")) %>%
+  filter(datetime_tz>=as.POSIXct(format(as.Date(strptime("","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")) %>%
   filter(Hour <= 5 | Hour >= 19) %>%
   group_by(treatment) %>%
   summarise(max_pm25=max(pm2_5_indr_cor,na.rm=T),
@@ -1430,9 +1220,9 @@ for(i in seq(room_id_list)) {
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   #plot_df$date_daymon<-as.Date(plot_df$datetime_tz,format = "%d-%b")
   srt_end$start_date<-as.Date(srt_end$start_date,format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
   
   evening_hours_inter_rm<- plot_df %>%
@@ -1478,7 +1268,7 @@ for(i in seq(room_id_list)) {
         panel.grid.major.y = element_line(color = "gray70",linewidth = 1.5))
   }
   
-  png(paste0("O:\\PRIV\\IRBData\\AspireHealthTulare\\Analysis\\Air Quality Analysis\\home_reports_plots\\avg_pm_barplots\\",room,"_avg_pm_barplot.png"),
+  png(paste0("\\",room,"_avg_pm_barplot.png"),
              width = 1000, height = 1000)
     print(p)
     dev.off()
@@ -1487,25 +1277,25 @@ for(i in seq(room_id_list)) {
 # Version 4: One Plot per Household
 
 ## PM 2.5 time series plot with filter data  
-Houses H01, H19, H28, H31, H34 do not have indoor pm2.5 data during the intervention period. 
+Houses XX do not have indoor pm2.5 data during the intervention period. 
 
 ```{r, warnings = FALSE}
 
-missing_pm_homes<-c("H01","H19","H28","H31","H34")
+missing_pm_homes<-c()
 house_id_list<-unique(all_data$house_id)
 
 ## households that do not have indoor pm logged for 2nd week of intervention
-plot_week1_indr<-c("H01","H02","H07","H15","H30")
+plot_week1_indr<-c()
 
 #households with no power data (no filter data)
 ##will highlight times when filter should be running
-no_power<-c("H10","H26")
+no_power<-c()
 
 part_start_end$House_id<-str_sub(part_start_end$House_id,1,3)
 part_start_end$start_date<-str_pad(part_start_end$start_date,6,"0",side = "left")  
 
-intervention_pm25<-subset(all_data, date>="2023-10-07")
-no_indoor_pm<-c("R33","R35","R36","R38","R41","R45","R48","R56")
+intervention_pm25<-subset(all_data, date>="")
+no_indoor_pm<-c()
 
 
 for(i in seq(house_id_list)) {
@@ -1522,9 +1312,9 @@ for(i in seq(house_id_list)) {
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   #plot_df$date_daymon<-as.Date(plot_df$datetime_tz,format = "%d-%b")
   srt_end$start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
   
   ## calculate average pm2.5 and power for household
@@ -1541,9 +1331,9 @@ for(i in seq(house_id_list)) {
   ## subset power data for filter on shading
   if(house %in% no_power) {
   
-  plot_df_power<-subset(plot_df, date>="2023-10-08 00:00:00 UCT" & house_id ==house)
-  # start_date<-"2023-10-08 00:00:00 UCT"
-  # end_date<-"2023-10-21 02:00:00 UCT"
+  plot_df_power<-subset(plot_df, date>="" & house_id ==house)
+  # start_date<-""
+  # end_date<-""
 
   } else {
     plot_df_power<-subset(plot_df_avg, max_power>20)  
@@ -1558,13 +1348,13 @@ for(i in seq(house_id_list)) {
   }
   
     if(house %in% no_indoor_pm) {
-    enddate<-"2023-10-23 23:00:00 PDT"
+    enddate<-""
   }else {
   enddate<-max(plot_df_avg$datetime_tz[which(!is.na(plot_df_avg$avg_indr_pm))])
   }
    
   start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(start_date)<-2023
+  year(start_date)<-2---
   ## Adjust for timezone
   #plot_df_power$datetime_tz<-as.POSIXct(format(plot_df_power$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   plot_df_power<-subset(plot_df_power, datetime_tz>=srt_end$start_date & datetime_tz<=srt_end$end_date)
@@ -1594,7 +1384,7 @@ for(i in seq(house_id_list)) {
     alpha_val<-0.3
 
 
-# png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"_week2_full_plot.png"),
+# png(paste0("/",house,"_week2_full_plot.png"),
 #     width=1400, height = 900)  
   
   ## full plot to save for wk 2
@@ -1654,7 +1444,7 @@ evening_hours_inter_df<- intervention_pm25 %>%
 avg_indr_evening_pm<- all_data %>%
   mutate(datetime_tz = as.POSIXct(format(date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles"),
          Hour = as.numeric(hour(datetime_tz))) %>%
-  filter(datetime_tz>=as.POSIXct(format(as.Date(strptime("2023-10-07","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")) %>%
+  filter(datetime_tz>=as.POSIXct(format(as.Date(strptime("","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")) %>%
   filter(Hour <= 5 | Hour >= 19) %>%
   group_by(treatment) %>%
   summarise(max_pm25=max(pm2_5_indr_cor,na.rm=T),
@@ -1676,9 +1466,9 @@ for(i in seq(house_id_list)) {
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   #plot_df$date_daymon<-as.Date(plot_df$datetime_tz,format = "%d-%b")
   srt_end$start_date<-as.Date(srt_end$start_date,format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
   
   evening_hours_inter_rm<- plot_df %>%
@@ -1728,7 +1518,7 @@ for(i in seq(house_id_list)) {
         panel.grid.major.y = element_line(color = "gray70",linewidth = 1.5))
   }
   
-  # png(paste0("O:\\PRIV\\IRBData\\AspireHealthTulare\\Analysis\\Air Quality Analysis\\home_reports_plots\\avg_pm_barplots\\",house,"_avg_pm_barplot.png"),
+  # png(paste0("\\",house,"_avg_pm_barplot.png"),
   #            width = 1000, height = 1000)
   #   print(p)
   #   dev.off()
@@ -1764,9 +1554,9 @@ for(i in seq(missing_pm_homes)) {
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   #plot_df$date_daymon<-as.Date(plot_df$datetime_tz,format = "%d-%b")
   srt_end$start_date<-as.Date(srt_end$start_date,format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
 
   
@@ -1806,7 +1596,7 @@ for(i in seq(missing_pm_homes)) {
         panel.grid.major.y = element_line(color = "gray70",linewidth = 1.5))
   }
   
-  png(paste0("O:\\PRIV\\IRBData\\AspireHealthTulare\\Analysis\\Air Quality Analysis\\home_reports_plots\\avg_pm_barplots\\",house,"_avg_pm_barplot.png"),
+  png(paste0("\\",house,"_avg_pm_barplot.png"),
              width = 1000, height = 1000)
     print(p)
     dev.off()
@@ -1885,7 +1675,7 @@ for(i in seq(missing_pm_homes)) {
   
 
   
-  png(paste0("O:\\PRIV\\IRBData\\AspireHealthTulare\\Analysis\\Air Quality Analysis\\home_reports_plots\\avg_pm_barplots\\",house,"_avg_pm_barplot_v2.png"),
+  png(paste0("\\",house,"_avg_pm_barplot_v2.png"),
              width = 1000, height = 1000)
     print(p)
     dev.off()
@@ -1907,9 +1697,9 @@ for(i in seq(missing_pm_homes)) {
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   #plot_df$date_daymon<-as.Date(plot_df$datetime_tz,format = "%d-%b")
   srt_end$start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
   
   ## calculate average pm2.5 and power for household
@@ -1935,7 +1725,7 @@ for(i in seq(missing_pm_homes)) {
   enddate<-max(plot_df_avg$datetime_tz[which(!is.na(plot_df_avg$avg_indr_pm))])
    
   start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(start_date)<-2023
+  year(start_date)<-2---
 
   ## only plot second week of intervention
   plot_df_avg$time<-1:nrow(plot_df_avg)
@@ -1953,7 +1743,7 @@ for(i in seq(missing_pm_homes)) {
     alpha_val<-0.3
 
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"_week2_nofilter_plot.png"),
+png(paste0("/",house,"_week2_nofilter_plot.png"),
     width=1400, height = 900)  
   
   ## full plot to save for wk 2
@@ -1990,14 +1780,14 @@ Capture Outdoor PM unique to each home.
 ## Average Ozone
 avg_ozone<-ozone_df %>%
   mutate(nice_Date = as.Date(strptime(Date,"%m/%d/%Y"))) %>%
-  filter(nice_Date >=as.Date(strptime("10/07/2023","%m/%d/%Y")) & nice_Date <= as.Date(strptime("10/29/2023","%m/%d/%Y"))) %>%
+  filter(nice_Date >=as.Date(strptime("","%m/%d/%Y")) & nice_Date <= as.Date(strptime("","%m/%d/%Y"))) %>%
   summarise(max_ozone = max(Ozone_AQI_Value),
             min_ozone = min(Ozone_AQI_Value),
             avg_ozone = mean(Ozone_AQI_Value))
             
 ## Average Outdoor PM25 
 data_out$datetime_tz<-as.POSIXct(format(data_out$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
-intervention_pm25<-subset(data_out, datetime_tz>=as.POSIXct(format(as.Date(strptime("2023-10-07","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles"))
+intervention_pm25<-subset(data_out, datetime_tz>=as.POSIXct(format(as.Date(strptime("","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles"))
 evening_hours_inter_df<- intervention_pm25 %>%
    mutate(Hour = as.numeric(hour(datetime_tz))) %>% 
   filter(Hour <= 5 | Hour >= 19) %>%
@@ -2010,7 +1800,7 @@ evening_hours_inter_df<- intervention_pm25 %>%
 avg_indr_evening_pm<- all_data %>%
   mutate(datetime_tz = as.POSIXct(format(date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles"),
          Hour = as.numeric(hour(datetime_tz))) %>%
-  filter(datetime_tz>=as.POSIXct(format(as.Date(strptime("2023-10-07","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")) %>%
+  filter(datetime_tz>=as.POSIXct(format(as.Date(strptime("","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")) %>%
   filter(Hour <= 5 | Hour >= 19) %>%
   group_by(treatment) %>%
   summarise(max_pm25=max(pm2_5_indr_cor,na.rm=T),
@@ -2032,9 +1822,9 @@ for(i in seq(house_id_list)) {
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   #plot_df$date_daymon<-as.Date(plot_df$datetime_tz,format = "%d-%b")
   srt_end$start_date<-as.Date(srt_end$start_date,format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
   
   evening_hours_inter_rm<- plot_df %>%
@@ -2082,7 +1872,7 @@ for(i in seq(house_id_list)) {
         panel.grid.major.y = element_line(color = "gray70",linewidth = 1.5))
   }
   
-  png(paste0("O:\\PRIV\\IRBData\\AspireHealthTulare\\Analysis\\Air Quality Analysis\\home_reports_plots\\avg_pm_barplots\\",house,"_avg_pm_barplot_span.png"),
+  png(paste0("\\",house,"_avg_pm_barplot_span.png"),
              width = 1000, height = 1000)
     print(p)
     dev.off()
@@ -2106,9 +1896,9 @@ for(i in seq(missing_pm_homes)) {
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   #plot_df$date_daymon<-as.Date(plot_df$datetime_tz,format = "%d-%b")
   srt_end$start_date<-as.Date(srt_end$start_date,format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
   
   evening_hours_inter_rm<- plot_df %>%
@@ -2162,7 +1952,7 @@ for(i in seq(missing_pm_homes)) {
   
 
   
-  png(paste0("O:\\PRIV\\IRBData\\AspireHealthTulare\\Analysis\\Air Quality Analysis\\home_reports_plots\\avg_pm_barplots\\",house,"_avg_pm_barplot_v2_span.png"),
+  png(paste0("\\",house,"_avg_pm_barplot_v2_span.png"),
              width = 1000, height = 1000)
     print(p)
     dev.off()
@@ -2184,9 +1974,9 @@ for(i in seq(missing_pm_homes)) {
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   #plot_df$date_daymon<-as.Date(plot_df$datetime_tz,format = "%d-%b")
   srt_end$start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
   
   ## calculate average pm2.5 and power for household
@@ -2212,7 +2002,7 @@ for(i in seq(missing_pm_homes)) {
   enddate<-max(plot_df_avg$datetime_tz[which(!is.na(plot_df_avg$avg_indr_pm))])
    
   start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(start_date)<-2023
+  year(start_date)<-2---
 
   ## only plot second week of intervention
   plot_df_avg$time<-1:nrow(plot_df_avg)
@@ -2230,7 +2020,7 @@ for(i in seq(missing_pm_homes)) {
     alpha_val<-0.3
  Sys.setlocale("LC_TIME","Spanish")
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"_week2_nofilter_plot_span.png"),
+png(paste0("/",house,"_week2_nofilter_plot_span.png"),
     width=1400, height = 900)  
   
   ## full plot to save for wk 2
@@ -2270,14 +2060,14 @@ Capture Outdoor PM unique to each home.
 ## Average Ozone
 avg_ozone<-ozone_df %>%
   mutate(nice_Date = as.Date(strptime(Date,"%m/%d/%Y"))) %>%
-  filter(nice_Date >=as.Date(strptime("10/07/2023","%m/%d/%Y")) & nice_Date <= as.Date(strptime("10/29/2023","%m/%d/%Y"))) %>%
+  filter(nice_Date >=as.Date(strptime("","%m/%d/%Y")) & nice_Date <= as.Date(strptime("","%m/%d/%Y"))) %>%
   summarise(max_ozone = max(Ozone_AQI_Value),
             min_ozone = min(Ozone_AQI_Value),
             avg_ozone = mean(Ozone_AQI_Value))
             
 ## Average Outdoor PM25 
 data_out$datetime_tz<-as.POSIXct(format(data_out$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
-intervention_pm25<-subset(data_out, datetime_tz>=as.POSIXct(format(as.Date(strptime("2023-10-07","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles"))
+intervention_pm25<-subset(data_out, datetime_tz>=as.POSIXct(format(as.Date(strptime("","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles"))
 evening_hours_inter_df<- intervention_pm25 %>%
    mutate(Hour = as.numeric(hour(datetime_tz))) %>% 
   filter(Hour <= 5 | Hour >= 19) %>%
@@ -2290,7 +2080,7 @@ evening_hours_inter_df<- intervention_pm25 %>%
 avg_indr_evening_pm<- all_data %>%
   mutate(datetime_tz = as.POSIXct(format(date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles"),
          Hour = as.numeric(hour(datetime_tz))) %>%
-  filter(datetime_tz>=as.POSIXct(format(as.Date(strptime("2023-10-07","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")) %>%
+  filter(datetime_tz>=as.POSIXct(format(as.Date(strptime("","%Y-%m-%d")),tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")) %>%
   filter(Hour <= 5 | Hour >= 19) %>%
   group_by(treatment) %>%
   summarise(max_pm25=max(pm2_5_indr_cor,na.rm=T),
@@ -2312,9 +2102,9 @@ for(i in seq(house_id_list)) {
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   #plot_df$date_daymon<-as.Date(plot_df$datetime_tz,format = "%d-%b")
   srt_end$start_date<-as.Date(srt_end$start_date,format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
   
   evening_hours_inter_rm<- plot_df %>%
@@ -2362,7 +2152,7 @@ for(i in seq(house_id_list)) {
         panel.grid.major.y = element_line(color = "gray70",linewidth = 1.5))
   }
   
-  png(paste0("O:\\PRIV\\IRBData\\AspireHealthTulare\\Analysis\\Air Quality Analysis\\home_reports_plots\\avg_pm_barplots\\",house,"_avg_pm_barplot_span.png"),
+  png(paste0("\\",house,"_avg_pm_barplot_span.png"),
              width = 1000, height = 1000)
     print(p)
     dev.off()
@@ -2376,21 +2166,21 @@ Houses H01, H19, H28, H31, H34 do not have indoor pm2.5 data during the interven
 
 ```{r, warnings = FALSE}
 
-missing_pm_homes<-c("H01","H19","H28","H31","H34")
+missing_pm_homes<-c()
 house_id_list<-unique(all_data$house_id)
 
 ## households that do not have indoor pm logged for 2nd week of intervention
-plot_week1_indr<-c("H01","H02","H07","H15","H30")
+plot_week1_indr<-c()
 
 #households with no power data (no filter data)
 ##will highlight times when filter should be running
-no_power<-c("H10","H26")
+no_power<-c()
 
 part_start_end$House_id<-str_sub(part_start_end$House_id,1,3)
 part_start_end$start_date<-str_pad(part_start_end$start_date,6,"0",side = "left")  
 
-intervention_pm25<-subset(all_data, date>="2023-10-07")
-no_indoor_pm<-c("R33","R35","R36","R38","R41","R45","R48","R56")
+intervention_pm25<-subset(all_data, date>="")
+no_indoor_pm<-c()
 
 
 
@@ -2408,9 +2198,9 @@ for(i in seq(house_id_list)) {
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   #plot_df$date_daymon<-as.Date(plot_df$datetime_tz,format = "%d-%b")
   srt_end$start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
   
   ## calculate average pm2.5 and power for household
@@ -2427,9 +2217,9 @@ for(i in seq(house_id_list)) {
   ## subset power data for filter on shading
   if(house %in% no_power) {
   
-  plot_df_power<-subset(plot_df, date>="2023-10-08 00:00:00 UCT" & house_id ==house)
-  # start_date<-"2023-10-08 00:00:00 UCT"
-  # end_date<-"2023-10-21 02:00:00 UCT"
+  plot_df_power<-subset(plot_df, date>="" & house_id ==house)
+  # start_date<-""
+  # end_date<-""
 
   } else {
     plot_df_power<-subset(plot_df_avg, max_power>20)  
@@ -2444,13 +2234,13 @@ for(i in seq(house_id_list)) {
   }
   
     if(house %in% no_indoor_pm) {
-    enddate<-"2023-10-23 23:00:00 PDT"
+    enddate<-""
   }else {
   enddate<-max(plot_df_avg$datetime_tz[which(!is.na(plot_df_avg$avg_indr_pm))])
   }
    
   start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(start_date)<-2023
+  year(start_date)<-2---
   ## Adjust for timezone
   #plot_df_power$datetime_tz<-as.POSIXct(format(plot_df_power$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   plot_df_power<-subset(plot_df_power, datetime_tz>=srt_end$start_date & datetime_tz<=srt_end$end_date)
@@ -2480,7 +2270,7 @@ for(i in seq(house_id_list)) {
     alpha_val<-0.3
 Sys.setlocale("LC_TIME","Spanish")
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"_week2_full_plot_span.png"),
+png(paste0("/",house,"_week2_full_plot_span.png"),
     width=1400, height = 900)  
   
   ## full plot to save for wk 2
@@ -2517,8 +2307,7 @@ Sys.setlocale("LC_TIME","English")
 
 ```{r}
 
-# "H20", "H22"
-  house = "H22"
+  house = ""
 
   plot_df<-all_data_ambassador[which(all_data_ambassador$house_id == house),c("room_id","house_id","date","pm2_5_indr_cor","pm2_5_bluesky","power")]
   trtment<-"treatment"
@@ -2527,9 +2316,9 @@ Sys.setlocale("LC_TIME","English")
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   #plot_df$date_daymon<-as.Date(plot_df$datetime_tz,format = "%d-%b")
   srt_end$start_date<-as.Date(srt_end$start_date,format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
   
   evening_hours_inter_rm<- plot_df %>%
@@ -2577,7 +2366,7 @@ Sys.setlocale("LC_TIME","English")
         panel.grid.major.y = element_line(color = "gray70",linewidth = 1.5))
   }
   
-  png(paste0("O:\\PRIV\\IRBData\\AspireHealthTulare\\Analysis\\Air Quality Analysis\\home_reports_plots\\avg_pm_barplots\\",house,"_avg_pm_barplot.png"),
+  png(paste0("\\",house,"_avg_pm_barplot.png"),
              width = 1000, height = 1000)
     print(p)
     dev.off()
@@ -2603,8 +2392,7 @@ Sys.setlocale("LC_TIME","English")
 
 ```{r}
 
-# "H20"  "H22"
-    house<-"H22"
+    house<-""
     
 
   ##Subset Data to intervention period for selected room
@@ -2617,9 +2405,9 @@ Sys.setlocale("LC_TIME","English")
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
 
   srt_end$start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
   
   ## calculate average pm2.5 and power for household
@@ -2636,9 +2424,9 @@ Sys.setlocale("LC_TIME","English")
   ## subset power data for filter on shading
   # if(house %in% no_power) {
   # 
-  # plot_df_power<-subset(plot_df, date>="2023-10-08 00:00:00 UCT" & house_id ==house)
-  # # start_date<-"2023-10-08 00:00:00 UCT"
-  # # end_date<-"2023-10-21 02:00:00 UCT"
+  # plot_df_power<-subset(plot_df, date>="" & house_id ==house)
+  # # start_date<-""
+  # # end_date<-""
   # 
   # } else {
     plot_df_power<-subset(plot_df_avg, max_power>20)  
@@ -2654,7 +2442,7 @@ Sys.setlocale("LC_TIME","English")
 
    
   start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(start_date)<-2023
+  year(start_date)<-2---
   ## Adjust for timezone
   #plot_df_power$datetime_tz<-as.POSIXct(format(plot_df_power$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
   plot_df_power<-subset(plot_df_power, datetime_tz>=srt_end$start_date & datetime_tz<=srt_end$end_date)
@@ -2684,7 +2472,7 @@ Sys.setlocale("LC_TIME","English")
     alpha_val<-0.3
 
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"_week2_full_plot.png"),
+png(paste0("/",house,"_week2_full_plot.png"),
     width=1400, height = 900)
   
   ## full plot to save for wk 2
@@ -2714,8 +2502,8 @@ dev.off()
 ## Bar Plot Spanish Version 
 
 ```{r}
-# "H21", "H22"
-  house = "H22"
+
+  house = ""
 
  plot_df<-all_data_ambassador[which(all_data_ambassador$house_id == house),c("room_id","house_id","date","pm2_5_indr_cor","pm2_5_bluesky","power")]
   trtment<-"treatment"
@@ -2775,7 +2563,7 @@ dev.off()
         panel.grid.major.y = element_line(color = "gray70",linewidth = 1.5))
   }
   
-  png(paste0("O:\\PRIV\\IRBData\\AspireHealthTulare\\Analysis\\Air Quality Analysis\\home_reports_plots\\avg_pm_barplots\\",house,"_avg_pm_barplot_span.png"),
+  png(paste0("\\",house,"_avg_pm_barplot_span.png"),
              width = 1000, height = 1000)
     print(p)
     dev.off()
@@ -2802,8 +2590,8 @@ dev.off()
 
 ```{r}
 
-# "H21", "H22"
-  house = "H21"
+
+  house = ""
 
   ##Subset Data to intervention period for selected room
   plot_df<-all_data_ambassador[which(all_data_ambassador$house_id == house),c("room_id","house_id","date","pm2_5_indr_cor","pm2_5_bluesky","power")]
@@ -2815,9 +2603,9 @@ dev.off()
   plot_df$datetime_tz<-as.POSIXct(format(plot_df$date, tz="America/Los_Angeles",usetz = TRUE),tz = "America/Los_Angeles")
 
   srt_end$start_date<-as.Date(srt_end$start_date, format = "%d-%b")
-  year(srt_end$start_date)<-2023
+  year(srt_end$start_date)<-2---
   srt_end$end_date<-as.Date(srt_end$end_date, format = "%d-%b")
-  year(srt_end$end_date)<-2023
+  year(srt_end$end_date)<-2---
   plot_df<-subset(plot_df, datetime_tz >= srt_end$start_date & datetime_tz <=srt_end$end_date) 
   
   ## calculate average pm2.5 and power for household
@@ -2834,9 +2622,9 @@ dev.off()
   ## subset power data for filter on shading
   # if(house %in% no_power) {
   # 
-  # plot_df_power<-subset(plot_df, date>="2023-10-08 00:00:00 UCT" & house_id ==house)
-  # # start_date<-"2023-10-08 00:00:00 UCT"
-  # # end_date<-"2023-10-21 02:00:00 UCT"
+  # plot_df_power<-subset(plot_df, date>="" & house_id ==house)
+  # # start_date<-""
+  # # end_date<-""
   # 
   # } else {
     plot_df_power<-subset(plot_df_avg, max_power>20)  
@@ -2882,7 +2670,7 @@ dev.off()
     alpha_val<-0.3
 Sys.setlocale("LC_TIME","Spanish")
 
-png(paste0("O:/PRIV/IRBData/AspireHealthTulare/Analysis/Air Quality Analysis/home_reports_plots/indoor_outdoor_pm25_byroom/",house,"_week2_full_plot_span.png"),
+png(paste0("/",house,"_week2_full_plot_span.png"),
     width=1400, height = 900)  
   
   ## full plot to save for wk 2
